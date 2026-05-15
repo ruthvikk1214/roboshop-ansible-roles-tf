@@ -30,3 +30,17 @@
     password: "{{ MYSQL_ROOT_PASSWORD }}"
     priv: "*.*:ALL,GRANT"
     state: present
+
+- name: install python pip
+  ansible.builtin.dnf:
+    name:
+      - python3-pip
+    state: present
+
+- name: install python dependencies
+  ansible.builtin.pip:
+    name:
+      - PyMySQL
+      - boto3
+      - botocore
+    executable: pip3
