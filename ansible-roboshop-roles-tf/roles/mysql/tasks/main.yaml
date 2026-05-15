@@ -20,6 +20,10 @@
 # - name: setup root password
 #   ansible.builtin.command: mysql_secure_installation --set-root-pass "{{ MYSQL_ROOT_PASSWORD }}"
 
+- name: install pymysql
+  ansible.builtin.pip:
+    name: PyMySQL
+    executable: pip3
 - name: setup root password
   community.mysql.mysql_user:
     login_unix_socket: /var/lib/mysql/mysql.sock
