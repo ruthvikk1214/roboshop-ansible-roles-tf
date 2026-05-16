@@ -1,46 +1,21 @@
-# - name: setup root password
-#   ansible.builtin.command: mysql_secure_installation --set-root-pass "{{ MYSQL_ROOT_PASSWORD }}"
-
 - name: install python pip
   ansible.builtin.dnf:
-    name:
-      - python3-pip
+    name: python3-pip
     state: present
 
-- name: install pymysql
-  ansible.builtin.pip:
-    name: PyMySQL
-    executable: pip3
-
-- name: setup root password for localhost
-  community.mysql.mysql_user:
-    login_user: root
-    login_unix_socket: /var/lib/mysql/mysql.sock
-    name: root
-    host: localhost
-    password: "{{ MYSQL_ROOT_PASSWORD }}"
-    state: present
-
-- name: allow remote root access
-  community.mysql.mysql_user:
-    login_user: root
-    login_unix_socket: /var/lib/mysql/mysql.sock
-    name: root
-    host: "%"
-    password: "{{ MYSQL_ROOT_PASSWORD }}"
-    priv: "*.*:ALL,GRANT"
-    state: present
-
-- name: install python pip
-  ansible.builtin.dnf:
-    name:
-      - python3-pip
-    state: present
-
-- name: install python dependencies
+- name: install aws sdk libs
   ansible.builtin.pip:
     name:
-      - PyMySQL
       - boto3
       - botocore
     executable: pip3
+
+- name: setup root password
+  ansible.builtin.command: mysql_secure_installation --set-root-pass "{{ MYSQL_ROOT_PASSWORD }}"
+
+- name: allow remote root access
+  ansible.builtin.command: >
+    mysql -uroot -p{{ MYSQL_ROOT_PASSWORD }}
+    -e "CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY '{{ MYSQL_ROOT_PASSWORD }}';
+        GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+        FLUSH PRIVILEGES;"
