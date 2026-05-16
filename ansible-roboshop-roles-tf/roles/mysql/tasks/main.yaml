@@ -17,5 +17,21 @@
   - boto3
   - botocore
 
-- name: setup root password
-  ansible.builtin.command: mysql_secure_installation --set-root-pass "{{ MYSQL_ROOT_PASSWORD }}"
+- name: setup root password localhost
+  community.mysql.mysql_user:
+    name: root
+    host: localhost
+    password: "{{ MYSQL_ROOT_PASSWORD }}"
+    login_unix_socket: /var/lib/mysql/mysql.sock
+    plugin: mysql_native_password
+    state: present
+
+- name: setup root password remote
+  community.mysql.mysql_user:
+    name: root
+    host: "%"
+    password: "{{ MYSQL_ROOT_PASSWORD }}"
+    login_unix_socket: /var/lib/mysql/mysql.sock
+    plugin: mysql_native_password
+    priv: "*.*:ALL,GRANT"
+    state: present
