@@ -43,8 +43,7 @@
     name: root
     host: "%"
     password: "{{ MYSQL_ROOT_PASSWORD }}"
-    login_user: root
-    login_password: "{{ MYSQL_ROOT_PASSWORD }}"
+    login_unix_socket: /var/lib/mysql/mysql.sock
     plugin: mysql_native_password
     priv: "*.*:ALL,GRANT"
     state: present
