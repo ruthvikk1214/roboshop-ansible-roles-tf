@@ -10,7 +10,7 @@ CART_HOST: cart.backend-alb-{{ env }}.rk1214.in
 SHIPPING_HOST: shipping.backend-alb-{{ env }}.rk1214.in
 PAYMENT_HOST: payment.backend-alb-{{ env }}.rk1214.in
 app_version: v3
-
+MYSQL_ROOT_PASSWORD: DevOps321
 project: roboshop
 env: dev
 domain: rk1214.in
