@@ -1,6 +1,8 @@
 - name: install python pip
   ansible.builtin.dnf:
-    name: python3-pip
+    name:
+      - python3-pip
+      - mysql
     state: present
 
 - name: install aws sdk libs
@@ -14,8 +16,9 @@
   ansible.builtin.command: mysql_secure_installation --set-root-pass "{{ MYSQL_ROOT_PASSWORD }}"
 
 - name: allow remote root access
-  ansible.builtin.command: >
-    mysql -uroot -p{{ MYSQL_ROOT_PASSWORD }}
-    -e "CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY '{{ MYSQL_ROOT_PASSWORD }}';
-        GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
-        FLUSH PRIVILEGES;"
+  ansible.builtin.shell: |
+    mysql -uroot -p{{ MYSQL_ROOT_PASSWORD }} <<EOF
+    CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY '{{ MYSQL_ROOT_PASSWORD }}';
+    GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+    FLUSH PRIVILEGES;
+    EOF
