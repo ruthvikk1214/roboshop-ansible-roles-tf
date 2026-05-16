@@ -17,6 +17,18 @@
   - boto3
   - botocore
 
+- name: install pip
+  ansible.builtin.package:
+    name: python3-pip
+    state: present
+
+- name: install python mysql dependencies
+  ansible.builtin.pip:
+    name:
+      - PyMySQL
+      - cryptography
+    executable: pip3
+
 - name: setup root password localhost
   community.mysql.mysql_user:
     name: root
